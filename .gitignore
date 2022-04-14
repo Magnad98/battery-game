@@ -41,6 +41,7 @@ ehthumbs.db
 Thumbs.db
 
 ###
-# Logs
+# Logs & Builds
 ###
 battery-game/Logs/*
+battery-game/Builds/*
