@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform movePoint;
     [SerializeField] float moveSpeed;
     [SerializeField] LayerMask whatStopsMovement;
-    [SerializeField] Animator animator;
+    // [SerializeField] Animator animator;
     float x, y, circleColliderRadius = .2f;
     Vector3 newPosition;
 
@@ -45,11 +45,11 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            animator.SetBool("Moving", false);
+            // animator.SetBool("isMoving", false);
         }
         else
         {
-            animator.SetBool("Moving", true);
+            // animator.SetBool("isMoving", true);
         }
     }
 }
