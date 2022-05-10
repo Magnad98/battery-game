@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Wire : MonoBehaviour
 {
+    public bool m_OnCross; // true if wire has been pushed on to a cross
     public bool Move(Vector2 direction) // Avoid ability to move diagonally
     {
         if (WireBlocked(transform.position, direction))
@@ -13,7 +14,7 @@ public class Wire : MonoBehaviour
         else
         {
             transform.Translate(direction); //Wire not blocked so move it
-            // TestForOnCross();
+            TestForOnCross();
             return true;
         }
     }
@@ -38,5 +39,27 @@ public class Wire : MonoBehaviour
             }
         }
         return false;
+    }
+
+    void TestForOnCross()
+    {
+        Color spriteRendererColor;
+        GameObject[] crosses = GameObject.FindGameObjectsWithTag("Cross");
+        foreach (var cross in crosses)
+        {
+            if (transform.position.x == cross.transform.position.x && transform.position.y == cross.transform.position.y)
+            {
+                //On a cross
+                spriteRendererColor = GetComponent<SpriteRenderer>().color;
+                spriteRendererColor.a = 0f;
+                GetComponent<SpriteRenderer>().color = spriteRendererColor;
+                m_OnCross = true;
+                return;
+            }
+        }
+        spriteRendererColor = GetComponent<SpriteRenderer>().color;
+        spriteRendererColor.a = 255f;
+        GetComponent<SpriteRenderer>().color = spriteRendererColor;
+        m_OnCross = false;
     }
 }

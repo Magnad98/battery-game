@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] LevelBuilder m_LevelBuilder;
     public GameObject m_NextButton;
     bool m_ReadyForInput;
-    Player m_Player; // Continue here: https://youtu.be/ESh8phnmiXg?t=2657
+    Player m_Player;
 
     void Start()
     {
@@ -32,4 +32,6 @@ public class GameManager : MonoBehaviour
             m_ReadyForInput = true;
         }
     }
+
+    //COntinue here: https://youtu.be/ESh8phnmiXg?t=2870
 }
