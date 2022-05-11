@@ -43,23 +43,18 @@ public class Wire : MonoBehaviour
 
     void TestForOnCross()
     {
-        Color spriteRendererColor;
         GameObject[] crosses = GameObject.FindGameObjectsWithTag("Cross");
         foreach (var cross in crosses)
         {
             if (transform.position.x == cross.transform.position.x && transform.position.y == cross.transform.position.y)
             {
                 //On a cross
-                spriteRendererColor = GetComponent<SpriteRenderer>().color;
-                spriteRendererColor.a = 0f;
-                GetComponent<SpriteRenderer>().color = spriteRendererColor;
+                GetComponent<SpriteRenderer>().color = Color.green;
                 m_OnCross = true;
                 return;
             }
         }
-        spriteRendererColor = GetComponent<SpriteRenderer>().color;
-        spriteRendererColor.a = 255f;
-        GetComponent<SpriteRenderer>().color = spriteRendererColor;
+        GetComponent<SpriteRenderer>().color = Color.white;
         m_OnCross = false;
     }
 }
