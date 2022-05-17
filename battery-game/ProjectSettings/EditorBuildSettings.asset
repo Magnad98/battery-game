@@ -8,7 +8,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Jungle.unity
     guid: 5e2111637868007489d3bb6627b71e32
+  - enabled: 1
+    path: Assets/Sokoban/Scenes/MainScene.unity
+    guid: 50bc992bc39640e4a8c07e1400c97077
+  - enabled: 1
+    path: Assets/Sokoban/Scenes/LevelScene.unity
+    guid: a6ae0ca275d3d024eaef5d4463950212
   m_configObjects: {}
