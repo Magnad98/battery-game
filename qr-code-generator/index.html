@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>QR Code Generator</title>
+
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    .form {
+      font-family: Helvetica, sans-serif;
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 16px;
+      background: #f7f7f7;
+      display: table;
+    }
+
+    .form h1 {
+      background: #5868bf;
+      padding: 20px 0;
+      font-weight: 300;
+      text-align: center;
+      color: #fff;
+      margin: -16px -16px 16px -16px;
+      font-size: 25px;
+    }
+
+    .form input[type="text"],
+    .form input[type="url"] {
+      box-sizing: border-box;
+      width: 100%;
+      background: #fff;
+      margin-bottom: 4%;
+      border: 1px solid #ccc;
+      padding: 3%;
+      color: #555;
+    }
+
+    .form input[type="text"]:focus,
+    .form input[type="url"]:focus {
+      box-shadow: 0 0 5px #5868bf;
+      padding: 3%;
+      border: 1px solid #5868bf;
+    }
+
+    .form button {
+      box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      width: 150px;
+      margin: 0 auto;
+      padding: 3%;
+      background: #5868bf;
+      border-bottom: 2px solid #5868bf;
+      border-top-style: none;
+      border-right-style: none;
+      border-left-style: none;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .form button:hover {
+      background: rgba(88, 104, 191, 0.5);
+    }
+
+    #qrcode-container {
+      display: none;
+    }
+
+    .qrcode {
+      padding: 16px 50px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .qrcode img {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .form div {
+      display: table-row;
+    }
+
+    button {
+      transform: translate(50%);
+      margin: 0px 10px 0px 0px
+    }
+
+    label,
+    input {
+      margin: 5px 10px 5px 10px;
+      display: table-cell;
+    }
+
+    h4 {
+      text-align: center;
+    }
+  </style>
+
+  <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+</head>
+
+<body onload="document.QRCodeFrom.reset();">
+  <div class="form">
+    <h1>
+      QR Code Generator for
+      <br>
+      batteries recycled:
+    </h1>
+    <form name="QRCodeFrom">
+      <div>
+        <label for="NineVolt-quantity">9V:</label>
+        <input type="number" id="NineVolt-quantity" name="NineVolt-quantity" min="0" max="100" step="1" value="0">
+      </div>
+      <div>
+        <label for="D-quantity">D:</label>
+        <input type="number" id="D-quantity" name="D-quantity" min="0" max="100" step="1" value="0">
+      </div>
+      <div>
+        <label for="C-quantity">C:</label>
+        <input type="number" id="C-quantity" name="C-quantity" min="0" max="100" step="1" value="0">
+      </div>
+      <div>
+        <label for="AA-quantity">AA:</label>
+        <input type="number" id="AA-quantity" name="AA-quantity" min="0" max="100" step="1" value="0">
+      </div>
+      <div>
+        <label for="AAA-quantity">AAA:</label>
+        <input type="number" id="AAA-quantity" name="AAA-quantity" min="0" max="100" step="1" value="0">
+      </div>
+      <div>
+        <label for="Cell-quantity">Cell:</label>
+        <input type="number" id="Cell-quantity" name="Cell-quantity" min="0" max="100" step="1" value="0">
+      </div>
+      <div>
+        <button type="button" onclick="generateQRCode()">
+          Generate QR Code
+        </button>
+      </div>
+    </form>
+
+    <div id="qrcode-container">
+      <h4>Your QR Code is:</h4>
+      <div id="qrcode" class="qrcode" style=""></div>
+    </div>
+
+    <script src="./src/index.js"></script>
+  </div>
+
+  <script>
+    const generateQRCode = () => {
+      let recycledBatteries = {
+        "NineVolt": document.getElementById("NineVolt-quantity").value,
+        "D": document.getElementById("D-quantity").value,
+        "C": document.getElementById("C-quantity").value,
+        "AA": document.getElementById("AA-quantity").value,
+        "AAA": document.getElementById("AAA-quantity").value,
+        "Cell": document.getElementById("Cell-quantity").value,
+      }
+      const nullFormCheck = (obj) => obj.NineVolt > 0 || obj.D > 0 || obj.C > 0 || obj.AA > 0 || obj.AAA > 0 || obj.Cell > 0
+      if (nullFormCheck(recycledBatteries)) {
+        let qrcodeContainer = document.getElementById("qrcode");
+        qrcodeContainer.innerHTML = "";
+        new QRCode(qrcodeContainer, {
+          text: JSON.stringify(recycledBatteries),
+          width: 256,
+          height: 256,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H
+        });
+        document.getElementById("qrcode-container").style.display = "block";
+        console.log(recycledBatteries)
+      } else {
+        alert("You need to recycle at least 1 battery to obtain a QR Code!");
+      }
+    }
+  </script>
+</body>
+
+</html>
