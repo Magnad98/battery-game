@@ -15,3 +15,4 @@ const port = 3001;
 http.listen(port, () => {
     console.log(`[QR CODE READER STARTED AT PORT ${port}]`);
 });
+/*------------------------------------------------------------*/
