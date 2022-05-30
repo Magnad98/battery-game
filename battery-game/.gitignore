@@ -43,5 +43,5 @@ Thumbs.db
 ###
 # Logs & Builds
 ###
-battery-game/Logs/*
-battery-game/Builds/*
+Logs/*
+Builds/*
