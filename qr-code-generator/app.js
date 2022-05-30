@@ -1,12 +1,18 @@
-const http = require('http')
-const fs = require('fs')
-const port = 3000
+/*------------------------------EXPRESS-JS------------------------------*/
+const express = require("express");
+const app = express();
 
-const server = http.createServer((req, res) => {
-    res.writeHead(200, { 'content-type': 'text/html' })
-    fs.createReadStream('index.html').pipe(res)
-})
+app.get("/", (request, response) => {
+    response.sendFile(__dirname + "/index.html");
+});
 
-server.listen(port, () => {
-    console.log(`Server is listening on port ${port}`)
-})
+app.use(express.static(__dirname + "/public"));
+
+/*------------------------------HTTP-SERVER------------------------------*/
+const http = require("http").createServer(app);
+const port = 3000;
+
+http.listen(port, () => {
+    console.log(`[QR CODE GENERATOR STARTED AT PORT ${port}]`);
+});
+/*------------------------------------------------------------*/
