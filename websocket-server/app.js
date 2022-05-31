@@ -6,7 +6,7 @@ const websocketServer = new websocket.Server({port: port}, () => {
 
 websocketServer.on('connection', (websocket) => {
     websocket.on('message', (data) => {
-        console.log('data received %o' + data)
+        console.log('data received:' + data)
         websocket.send(data)
     })
 
