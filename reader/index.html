@@ -13,17 +13,15 @@
     <script type="module" src="./js/index.js"></script>
 </head>
 <body>
+  <div id="input" class="panel">
     <h1>QR Code Reader</h1>
-    <hr>
-    <div id="input" class="panel">
-      <h1>Reader</h1>
-      <p>By clicking "OK" you agree to be awesome every day!</p>
-      <div id="reader"></div>
-    </div>
-    <div id="output" class="panel" hidden>
-      <h1 id="result-title"></h1>
-      <p id="result-text"></p>
-      <button class="button" id="rescan-button">Retry</button>
-    </div>    
+    <p>Scan a QR code received from the Recycling Center to unlock new levels in "Baterel's Recycling Adventure" video game!</p>
+    <div id="reader"></div>
+  </div>
+  <div id="output" class="panel" hidden>
+    <h1 id="result-title"></h1>
+    <p id="result-text"></p>
+    <button class="button" id="rescan-button">Retry</button>
+  </div>
 </body>
 </html>
