@@ -62,7 +62,7 @@ public class PusherManager : MonoBehaviour
             JObject json = JObject.Parse(data);
             Debug.Log(json["data"]);
             JObject json2 = JObject.Parse(json["data"].ToString());
-            Debug.Log(json2["message"]);
+            Debug.Log(json2["AA"]);
         });
     }
 

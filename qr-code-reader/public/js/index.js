@@ -1,9 +1,10 @@
-onScanSuccess = (qrCodeMessage) => {
+const onScanSuccess = (qrCodeMessage) => {
     document.getElementById('result').innerHTML = '<span class="result">QR Code scanned succesfully!</span>';
     console.log(JSON.parse(qrCodeMessage))
+    // POST json to localhost:3002/pusher
 }
 
-onScanError = (errorMessage) => {
+const onScanError = (errorMessage) => {
     //handle scan error
 }
 
