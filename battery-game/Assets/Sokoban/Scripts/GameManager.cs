@@ -6,17 +6,16 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] LevelBuilder m_LevelBuilder;
-    [SerializeField] Scene levelScene;
     public GameObject m_NextButton;
     bool m_ReadyForInput;
     Player m_Player;
 
+    string levelSceneName = "LevelScene";
+
 
     void Start()
     {
-        m_NextButton.SetActive(false);
         ResetScene();
-
     }
     void Update()
     {
@@ -39,9 +38,8 @@ public class GameManager : MonoBehaviour
 
     public void NextLevel()
     {
-        m_NextButton.SetActive(false);
         m_LevelBuilder.NextLevel();
-        StartCoroutine(ResetSceneAsync());
+        ResetScene();
     }
 
     public void ResetScene()
@@ -66,26 +64,23 @@ public class GameManager : MonoBehaviour
     {
         if (SceneManager.sceneCount > 1)
         {
-            AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync("LevelScene");
+            AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(levelSceneName);
             while (!asyncUnload.isDone)
             {
                 yield return null;
-                Debug.Log("Unloading...");
             }
-            Debug.Log("Unload Done");
             Resources.UnloadUnusedAssets();
         }
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("LevelScene", LoadSceneMode.Additive);
+
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(levelSceneName, LoadSceneMode.Additive);
         while (!asyncLoad.isDone)
         {
             yield return null;
-            Debug.Log("Loading...");
         }
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName("LevelScene"));
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(levelSceneName));
+
         m_LevelBuilder.Build();
         m_Player = FindObjectOfType<Player>();
-        Debug.Log("Level loaded");
-
         m_NextButton.SetActive(false);
     }
 }

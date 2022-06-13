@@ -48,11 +48,9 @@ public class LevelBuilder : MonoBehaviour
         {
             foreach (var character in row)
             {
-                Debug.Log(character);
                 GameObject prefab = GetPrefab(character);
                 if (prefab)
                 {
-                    Debug.Log(prefab.name);
                     Instantiate(prefab, new Vector3(x, y, 0), Quaternion.identity);
                 }
                 x++;

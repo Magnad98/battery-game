@@ -36,12 +36,7 @@ public class Levels : MonoBehaviour
         TextAsset textAsset = (TextAsset)Resources.Load(filename);
         if (!textAsset)
         {
-            Debug.Log("Levels: " + filename + ".txt does not exist!");
             return;
-        }
-        else
-        {
-            Debug.Log("Levels imported");
         }
         string competeText = textAsset.text;
         string[] lines = competeText.Split(new string[] { "\n" }, System.StringSplitOptions.None);
@@ -51,7 +46,6 @@ public class Levels : MonoBehaviour
             string line = lines[i];
             if (line.StartsWith(";"))
             {
-                Debug.Log("New level added");
                 m_Levels.Add(new Level());
                 continue;
             }
