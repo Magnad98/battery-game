@@ -47,38 +47,57 @@ public class PusherManager : MonoBehaviour
             _pusher.Subscribed += OnChannelOnSubscribed;
             await _pusher.ConnectAsync();
         }
-        else
-        {
-            Debug.LogError("APP_KEY and APP_CLUSTER must be correctly set. Find how to set it at https://dashboard.pusher.com");
-        }
+        // else
+        // {
+        //     Debug.LogError("APP_KEY and APP_CLUSTER must be correctly set. Find how to set it at https://dashboard.pusher.com");
+        // }
     }
 
     private void PusherOnConnected(object sender)
     {
-        Debug.Log("Connected");
+        // Debug.Log("Connected");
         _channel.Bind("my-event", (string data) =>
         {
-            Debug.Log("my-event received");
-            JObject json = JObject.Parse(data);
-            Debug.Log(json["data"]);
-            JObject json2 = JObject.Parse(json["data"].ToString());
-            Debug.Log(json2["AA"]);
+            JObject json2 = JObject.Parse(JObject.Parse(data)["data"].ToString());
+
+            int NineVolt, D, C, AA, AAA, Cell;
+            Int32.TryParse(json2["NineVolt"].ToString(), out NineVolt);
+            Int32.TryParse(json2["D"].ToString(), out D);
+            Int32.TryParse(json2["C"].ToString(), out C);
+            Int32.TryParse(json2["AA"].ToString(), out AA);
+            Int32.TryParse(json2["AAA"].ToString(), out AAA);
+            Int32.TryParse(json2["Cell"].ToString(), out Cell);
+
+            if (AA >= 3 && AAA >= 2)
+            {
+                Debug.Log("Congratulations! You've unlocked Level 6");
+                // Add Level 6 permissions
+            }
+            else if (NineVolt + D + C + AA + AAA + Cell >= 10)
+            {
+                Debug.Log("Congratulations! You've unlocked Level 7");
+                // Add Level 7 permissions
+            }
+            else
+            {
+                Debug.Log("We're happy that you help us recycle!\n But unfortunately your betteries weren't enough to unlock a new level!");
+            }
         });
     }
 
     private void PusherOnConnectionStateChanged(object sender, ConnectionState state)
     {
-        Debug.Log("Connection state changed");
+        // Debug.Log("Connection state changed");
     }
 
     private void OnPusherOnError(object s, PusherException e)
     {
-        Debug.Log("Errored");
+        // Debug.Log("Errored");
     }
 
     private void OnChannelOnSubscribed(object s, Channel channel)
     {
-        Debug.Log("Subscribed");
+        // Debug.Log("Listening");
     }
 
     async Task OnApplicationQuit()
