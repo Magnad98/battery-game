@@ -4,36 +4,16 @@ using UnityEngine;
 public class JSONSaving : MonoBehaviour
 {
     private string path;
-    private PlayerData playerData;
-
 
     void Start()
     {
-        CreateStreamingAssets(Application.streamingAssetsPath);
         path = Application.streamingAssetsPath + "/" + "SaveData.json";
 
-        playerData = new PlayerData("Nico", 200f, 10f, 3);
+        if (!Directory.Exists(Application.streamingAssetsPath))
+            Directory.CreateDirectory(Application.streamingAssetsPath);
     }
 
-    void CreateStreamingAssets(string path)
-    {
-        if (!Directory.Exists(path))
-        {
-            Directory.CreateDirectory(path);
-        }
-    }
-
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.S))
-            SaveData();
-
-        if (Input.GetKeyDown(KeyCode.L))
-            LoadData();
-    }
-
-    public void SaveData()
+    public void SaveData(PlayerData playerData)
     {
         // Debug.Log("Saving Data to " + path);
         using StreamWriter writer = new StreamWriter(path);
@@ -42,12 +22,12 @@ public class JSONSaving : MonoBehaviour
         // Debug.Log(json);
     }
 
-    public void LoadData()
+    public PlayerData LoadData()
     {
         // Debug.Log("Loading Data from " + path);
         using StreamReader reader = new StreamReader(path);
         string json = reader.ReadToEnd();
-        playerData = new PlayerData(JsonUtility.FromJson<PlayerData>(json));
-        // Debug.Log(playerData.ToString());
+        // Debug.Log(JsonUtility.FromJson<PlayerData>(json));
+        return JsonUtility.FromJson<PlayerData>(json);
     }
 }

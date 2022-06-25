@@ -5,59 +5,37 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] LevelBuilder m_LevelBuilder;
-    public GameObject m_NextButton;
-    bool m_ReadyForInput;
-    Player m_Player;
+    JSONSaving jsonSavingScript;
+    PlayerData playerData;
 
     string levelSceneName = "LevelScene";
+    [SerializeField] LevelBuilder m_LevelBuilder;
+    [SerializeField] GameObject m_NextButton;
+    Player m_Player;
 
+    bool m_ReadyForInput;
 
     void Start()
     {
-        ResetScene();
+        HandleInitialization();
+        HandleSceneRestart();
     }
+
     void Update()
     {
-        Vector2 moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        moveInput.Normalize();
-        if (moveInput.sqrMagnitude > 0.5) // Button pressed or held
-        {
-            if (m_ReadyForInput)
-            {
-                m_ReadyForInput = false;
-                m_Player.Move(moveInput);
-                m_NextButton.SetActive(IsLevelComplete());
-            }
-        }
-        else
-        {
-            m_ReadyForInput = true;
-        }
+        HandleMovement();
+        HandleSaving();
     }
 
-    public void NextLevel()
+    void HandleInitialization()
     {
-        m_LevelBuilder.NextLevel();
-        ResetScene();
+        jsonSavingScript = FindObjectOfType<GameManager>().GetComponent<JSONSaving>();
+        playerData = new PlayerData("Nico", 200f, 10f, 3);
     }
 
-    public void ResetScene()
+    void HandleSceneRestart()
     {
         StartCoroutine(ResetSceneAsync());
-    }
-
-    bool IsLevelComplete()
-    {
-        Wire[] wires = FindObjectsOfType<Wire>();
-        foreach (var wire in wires)
-        {
-            if (!wire.m_OnCross)
-            {
-                return false;
-            }
-        }
-        return true;
     }
 
     IEnumerator ResetSceneAsync()
@@ -80,7 +58,71 @@ public class GameManager : MonoBehaviour
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(levelSceneName));
 
         m_LevelBuilder.Build();
-        m_Player = FindObjectOfType<Player>();
         m_NextButton.SetActive(false);
+        m_Player = FindObjectOfType<Player>();
+    }
+
+    void HandleMovement()
+    {
+        Vector2 moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        moveInput.Normalize();
+        if (moveInput.sqrMagnitude > 0.5) // Button pressed or held
+        {
+            if (m_ReadyForInput)
+            {
+                m_ReadyForInput = false;
+                m_Player.Move(moveInput);
+                m_NextButton.SetActive(IsLevelComplete());
+            }
+        }
+        else
+        {
+            m_ReadyForInput = true;
+        }
+    }
+
+    bool IsLevelComplete()
+    {
+        Wire[] wires = FindObjectsOfType<Wire>();
+        foreach (var wire in wires)
+        {
+            if (!wire.m_OnCross)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    void HandleSaving()
+    {
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            jsonSavingScript.SaveData(playerData);
+            Debug.Log(playerData.ToString());
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            playerData = jsonSavingScript.LoadData();
+            Debug.Log(playerData.ToString());
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            playerData = new PlayerData("Alex", 404f, 40f, 4);
+            Debug.Log(playerData.ToString());
+        }
+
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            Debug.Log(playerData.ToString());
+        }
+    }
+
+    public void NextLevel()
+    {
+        m_LevelBuilder.NextLevel();
+        HandleSceneRestart();
     }
 }
