@@ -2,31 +2,90 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Status { locked, unlocked, completed }
+
 public class PlayerData
 {
-    public string name;
-    public float health;
-    public float mana;
-    public int level;
+    List<Status> statuses;
+    List<int> batteries;
 
-    public PlayerData(string name, float health, float mana, int level)
+    public PlayerData(List<Status> statuses, List<int> batteries)
     {
-        this.name = name;
-        this.health = health;
-        this.mana = mana;
-        this.level = level;
+        this.statuses = new List<Status>();
+        foreach (Status status in statuses)
+        {
+            this.statuses.Add(status);
+        }
+
+        this.batteries = new List<int>();
+        foreach (int battery in batteries)
+        {
+            this.batteries.Add(battery);
+        }
     }
 
-    public PlayerData(PlayerData playerData)
+    public void AddBatteries(int NineVolt, int D, int C, int AA, int AAA, int Cell)
     {
-        this.name = playerData.name;
-        this.health = playerData.health;
-        this.mana = playerData.mana;
-        this.level = playerData.level;
+        batteries[0] += NineVolt;
+        batteries[1] += D;
+        batteries[2] += C;
+        batteries[3] += AA;
+        batteries[4] += AAA;
+        batteries[5] += Cell;
+        CheckForUnlockedLevels();
+    }
+
+    void CheckForUnlockedLevels()
+    {
+        if (batteries[3] >= 3 && batteries[4] >= 2)
+        {
+            UnlockLevel(6);
+        }
+        else if (batteries[0] + batteries[1] + batteries[2] + batteries[3] + batteries[4] + batteries[5] >= 10)
+        {
+            UnlockLevel(7);
+        }
+        else
+        {
+            Debug.Log("We're happy that you help us recycle! Keep it up! You will receive extra levels to play if you recycle more!");
+        }
+    }
+
+    void UnlockLevel(int levelID)
+    {
+        if (levelID <= statuses.Count)
+        {
+            Debug.Log($"Level {levelID} is already unlocked!");
+        }
+        else
+        {
+            statuses[statuses.Count] = Status.unlocked;
+            Debug.Log($"Level {levelID} has been unlocked!");
+        }
+    }
+
+    public void CompleteLevel(int levelID)
+    {
+        if (levelID > statuses.Count)
+        {
+            Debug.Log($"Level {levelID} can't be completed since it has not been unlocked!");
+        }
+        statuses[levelID - 1] = Status.completed;
+        Debug.Log($"Level {levelID} has been completed!");
     }
 
     public override string ToString()
     {
-        return $"{name} is at {health} HP with {mana} Mana. They have reached level {level}";
+        return $"\tStatuses: 1:{statuses[0]} 2:{statuses[1]} 3:{statuses[2]} 4:{statuses[3]} 5:{statuses[4]}, 6:{statuses[5]}, 7:{statuses[6]},\n\t\tBatteries: NnineVolt:{batteries[0]}, D:{batteries[1]}, C:{batteries[2]}, AA:{batteries[3]}, AAA:{batteries[4]}, Cell:{batteries[5]}";
+    }
+
+    public List<Status> GetStatuses()
+    {
+        return statuses;
+    }
+
+    public List<int> GetBatteries()
+    {
+        return batteries;
     }
 }

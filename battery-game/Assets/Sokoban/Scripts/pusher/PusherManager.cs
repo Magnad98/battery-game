@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 
 public class PusherManager : MonoBehaviour
 {
+    GameManager gameManager;
     // A mutation of https://unity3d.com/learn/tutorials/projects/2d-roguelike-tutorial/writing-game-manager
     public static PusherManager instance = null;
     private Pusher _pusher;
@@ -15,6 +16,8 @@ public class PusherManager : MonoBehaviour
 
     async Task Start()
     {
+        gameManager = FindObjectOfType<GameManager>().GetComponent<GameManager>();
+
         if (instance == null)
         {
             instance = this;
@@ -58,30 +61,15 @@ public class PusherManager : MonoBehaviour
         // Debug.Log("Connected");
         _channel.Bind("my-event", (string data) =>
         {
-            JObject json2 = JObject.Parse(JObject.Parse(data)["data"].ToString());
-
-            int NineVolt, D, C, AA, AAA, Cell;
-            Int32.TryParse(json2["NineVolt"].ToString(), out NineVolt);
-            Int32.TryParse(json2["D"].ToString(), out D);
-            Int32.TryParse(json2["C"].ToString(), out C);
-            Int32.TryParse(json2["AA"].ToString(), out AA);
-            Int32.TryParse(json2["AAA"].ToString(), out AAA);
-            Int32.TryParse(json2["Cell"].ToString(), out Cell);
-
-            if (AA >= 3 && AAA >= 2)
-            {
-                Debug.Log("Congratulations! You've unlocked Level 6");
-                // Add Level 6 permissions
-            }
-            else if (NineVolt + D + C + AA + AAA + Cell >= 10)
-            {
-                Debug.Log("Congratulations! You've unlocked Level 7");
-                // Add Level 7 permissions
-            }
-            else
-            {
-                Debug.Log("We're happy that you help us recycle!\n But unfortunately your betteries weren't enough to unlock a new level!");
-            }
+            JObject json = JObject.Parse(JObject.Parse(data)["data"].ToString());
+            gameManager.AddBatteries(
+                Int32.Parse(json["NineVolt"].ToString()),
+                Int32.Parse(json["C"].ToString()),
+                Int32.Parse(json["D"].ToString()),
+                Int32.Parse(json["AA"].ToString()),
+                Int32.Parse(json["AAA"].ToString()),
+                Int32.Parse(json["Cell"].ToString())
+            );
         });
     }
 

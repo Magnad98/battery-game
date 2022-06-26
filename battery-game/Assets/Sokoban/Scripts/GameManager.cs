@@ -30,7 +30,11 @@ public class GameManager : MonoBehaviour
     void HandleInitialization()
     {
         jsonSavingScript = FindObjectOfType<GameManager>().GetComponent<JSONSaving>();
-        playerData = new PlayerData("Nico", 200f, 10f, 3);
+        playerData = new PlayerData(
+            new List<Status>() { Status.unlocked, Status.unlocked, Status.unlocked, Status.unlocked, Status.unlocked, Status.locked, Status.locked },
+            new List<int>() { 0, 0, 0, 0, 0, 0 }
+        );
+        // Debug.Log(playerData.ToString());
     }
 
     void HandleSceneRestart()
@@ -99,25 +103,34 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.S))
         {
             jsonSavingScript.SaveData(playerData);
-            Debug.Log(playerData.ToString());
+            // Debug.Log(playerData.ToString());
         }
 
-        if (Input.GetKeyDown(KeyCode.L))
+        // if (Input.GetKeyDown(KeyCode.L))
+        // {
+        //     PlayerData pd = jsonSavingScript.LoadData();
+        //     playerData = new PlayerData(pd.GetStatuses(), pd.GetBatteries());
+        //     Debug.Log(playerData.ToString());
+        // }
+
+        if (Input.GetKeyDown(KeyCode.N))
         {
-            playerData = jsonSavingScript.LoadData();
+            playerData = new PlayerData(
+                new List<Status> { Status.completed, Status.unlocked, Status.unlocked, Status.unlocked, Status.unlocked, Status.locked, Status.locked },
+                new List<int> { 1, 2, 0, 3, 5, 4 }
+            );
             Debug.Log(playerData.ToString());
         }
 
         if (Input.GetKeyDown(KeyCode.P))
         {
-            playerData = new PlayerData("Alex", 404f, 40f, 4);
             Debug.Log(playerData.ToString());
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            Debug.Log(playerData.ToString());
-        }
+    public void AddBatteries(int NineVolt, int D, int C, int AA, int AAA, int Cell)
+    {
+        playerData.AddBatteries(NineVolt, D, C, AA, AAA, Cell);
     }
 
     public void NextLevel()
