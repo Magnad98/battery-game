@@ -114,7 +114,7 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            playerData.AddBatteries(0, 0, 0, 1, 1, 0);
+            AddBatteries(0, 0, 0, 1, 1, 0);
             Debug.Log(playerData.ToString());
         }
 
