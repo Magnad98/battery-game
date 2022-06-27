@@ -103,27 +103,24 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.S))
         {
             jsonSavingScript.SaveData(playerData);
-            // Debug.Log(playerData.ToString());
-        }
-
-        // if (Input.GetKeyDown(KeyCode.L))
-        // {
-        //     PlayerData pd = jsonSavingScript.LoadData();
-        //     playerData = new PlayerData(pd.GetStatuses(), pd.GetBatteries());
-        //     Debug.Log(playerData.ToString());
-        // }
-
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            playerData = new PlayerData(
-                new List<Status> { Status.completed, Status.unlocked, Status.unlocked, Status.unlocked, Status.unlocked, Status.locked, Status.locked },
-                new List<int> { 1, 2, 0, 3, 5, 4 }
-            );
             Debug.Log(playerData.ToString());
         }
 
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.L))
         {
+            playerData = jsonSavingScript.LoadData();
+            Debug.Log(playerData.ToString());
+        }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            playerData.AddBatteries(0, 0, 0, 1, 1, 0);
+            Debug.Log(playerData.ToString());
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            playerData.CompleteLevel(1);
             Debug.Log(playerData.ToString());
         }
     }

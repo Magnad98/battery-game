@@ -41,25 +41,21 @@ public class PlayerData
         {
             UnlockLevel(6);
         }
-        else if (batteries[0] + batteries[1] + batteries[2] + batteries[3] + batteries[4] + batteries[5] >= 10)
+        if (batteries[0] + batteries[1] + batteries[2] + batteries[3] + batteries[4] + batteries[5] >= 10)
         {
             UnlockLevel(7);
         }
-        else
-        {
-            Debug.Log("We're happy that you help us recycle! Keep it up! You will receive extra levels to play if you recycle more!");
-        }
+        // else
+        // {
+        //     Debug.Log("We're happy that you help us recycle! Keep it up! You will receive extra levels to play if you recycle more!");
+        // }
     }
 
     void UnlockLevel(int levelID)
     {
-        if (levelID <= statuses.Count)
+        if (statuses[levelID - 1] == Status.locked)
         {
-            Debug.Log($"Level {levelID} is already unlocked!");
-        }
-        else
-        {
-            statuses[statuses.Count] = Status.unlocked;
+            statuses[levelID - 1] = Status.unlocked;
             Debug.Log($"Level {levelID} has been unlocked!");
         }
     }

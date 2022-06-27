@@ -2,6 +2,7 @@ using System.IO;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 public class JSONSaving : MonoBehaviour
 {
@@ -9,58 +10,57 @@ public class JSONSaving : MonoBehaviour
 
     void Start()
     {
-        path = Application.streamingAssetsPath + "/" + "SaveData.json";
+        path = Application.streamingAssetsPath + "/" + "PlayerData.json";
 
         if (!Directory.Exists(Application.streamingAssetsPath))
             Directory.CreateDirectory(Application.streamingAssetsPath);
     }
 
-    public void SaveList<Type>(List<Type> list, string fileName)
-    {
-        string path = Application.streamingAssetsPath + "/" + fileName;
-        string OutputString = "";
-        foreach (var elem in list)
-            OutputString += JsonUtility.ToJson(elem) + "\n";
-        OutputString = OutputString.Substring(0, OutputString.Length - 1);
-        Debug.Log(OutputString);
-        System.IO.File.WriteAllText(path, OutputString);
-    }
-
-    public List<Type> LoadList<Type>(string fileName)
-    {
-        string path = Application.streamingAssetsPath + "/" + fileName;
-        string InputString = File.ReadAllText(path);
-
-        List<string> InputStringList = InputString.Split('\n').ToList();
-        List<Type> list = new List<Type>();
-        foreach (var elem in InputStringList)
-            list.Add(JsonUtility.FromJson<Type>(elem));
-        return list;
-    }
-
     public void SaveData(PlayerData playerData)
     {
-        Debug.Log("Saving Data to " + path);
-        using StreamWriter writer = new StreamWriter(path);
-        string json = JsonUtility.ToJson(playerData);
-        writer.Write(json);
-        Debug.Log(json);
+        string statusString, batteryString, outputString = "{\"levels\":[";
 
-        // SaveList<Status>(playerData.GetStatuses(), "statuses.json");
-        // SaveList<int>(playerData.GetBatteries(), "batteries.json");
+        List<Status> statuses = playerData.GetStatuses();
+        for (int i = 0; i < statuses.Count; i++)
+        {
+            statusString = $"\"{statuses[i]}\"";
+            outputString += statusString;
+            if (i < statuses.Count - 1)
+                outputString += ",";
+        }
+
+        outputString += "],\"batteries\":[";
+        List<int> batteries = playerData.GetBatteries();
+        for (int i = 0; i < batteries.Count; i++)
+        {
+            batteryString = $"{batteries[i]}";
+            outputString += batteryString;
+            if (i < batteries.Count - 1)
+                outputString += ",";
+        }
+
+        outputString += "]}";
+        using StreamWriter writer = new StreamWriter(path);
+        writer.Write(outputString);
     }
 
     public PlayerData LoadData()
     {
-        Debug.Log("Loading Data from " + path);
         using StreamReader reader = new StreamReader(path);
-        string json = reader.ReadToEnd();
-        Debug.Log(JsonUtility.FromJson<PlayerData>(json));
-        return JsonUtility.FromJson<PlayerData>(json);
+        string[] input = reader.ReadToEnd().Replace("{\"levels\":[", "").Replace("],\"batteries\":[", ";").Replace("]}", "").Split(';');
 
-        // return new PlayerData(
-        //     LoadList<Status>("statuses.json"),
-        //     LoadList<int>("batteries.json")
-        // );
+        List<Status> statuses = new List<Status>();
+        string[] statusesArray = input[0].Replace("\"", "").Split(',');
+        foreach (string element in statusesArray)
+            switch (element)
+            {
+                case "completed": statuses.Add(Status.completed); break;
+                case "unlocked": statuses.Add(Status.unlocked); break;
+                case "locked": statuses.Add(Status.locked); break;
+                default: statuses.Add(Status.locked); break;
+            }
+        List<int> batteries = input[1].Replace("\"", "").Split(',').Select(Int32.Parse).ToList();
+
+        return new PlayerData(statuses, batteries);
     }
 }
