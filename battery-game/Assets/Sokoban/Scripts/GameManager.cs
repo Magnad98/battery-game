@@ -1,138 +1,133 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    JSONSaving jsonSavingScript;
+    string activeScene;
+    SaveManager saveManagerScript;
     PlayerData playerData;
 
-    string levelSceneName = "LevelScene";
-    [SerializeField] LevelBuilder m_LevelBuilder;
-    [SerializeField] GameObject m_NextButton;
-    Player m_Player;
-
-    bool m_ReadyForInput;
+    [SerializeField] GameObject backgroundUI, buttonsUI, recycleUI, newGameButton, loadButton, recycleButton, levelButtons, recycleWindow;
+    bool levelsLoaded;
 
     void Start()
     {
-        HandleInitialization();
-        HandleSceneRestart();
+        activeScene = SceneManager.GetActiveScene().name;
+
+        switch (activeScene)
+        {
+            case "MainMenu":
+                {
+                    break;
+                }
+            case "Map":
+                {
+                    saveManagerScript = FindObjectOfType<GameManager>().GetComponent<SaveManager>();
+                    newGameButton.SetActive(true);
+                    loadButton.SetActive(false);
+                    recycleButton.SetActive(false);
+                    levelButtons.SetActive(false);
+                    levelsLoaded = false;
+                    recycleUI.SetActive(false);
+                    break;
+                }
+            default:
+                {
+                    break;
+                }
+        }
     }
 
     void Update()
     {
-        HandleMovement();
-        HandleSaving();
-    }
-
-    void HandleInitialization()
-    {
-        jsonSavingScript = FindObjectOfType<GameManager>().GetComponent<JSONSaving>();
-        playerData = new PlayerData(
-            new List<Status>() { Status.unlocked, Status.unlocked, Status.unlocked, Status.unlocked, Status.unlocked, Status.locked, Status.locked },
-            new List<int>() { 0, 0, 0, 0, 0, 0 }
-        );
-        // Debug.Log(playerData.ToString());
-    }
-
-    void HandleSceneRestart()
-    {
-        StartCoroutine(ResetSceneAsync());
-    }
-
-    IEnumerator ResetSceneAsync()
-    {
-        if (SceneManager.sceneCount > 1)
+        switch (activeScene)
         {
-            AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(levelSceneName);
-            while (!asyncUnload.isDone)
-            {
-                yield return null;
-            }
-            Resources.UnloadUnusedAssets();
-        }
-
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(levelSceneName, LoadSceneMode.Additive);
-        while (!asyncLoad.isDone)
-        {
-            yield return null;
-        }
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName(levelSceneName));
-
-        m_LevelBuilder.Build();
-        m_NextButton.SetActive(false);
-        m_Player = FindObjectOfType<Player>();
-    }
-
-    void HandleMovement()
-    {
-        Vector2 moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        moveInput.Normalize();
-        if (moveInput.sqrMagnitude > 0.5) // Button pressed or held
-        {
-            if (m_ReadyForInput)
-            {
-                m_ReadyForInput = false;
-                m_Player.Move(moveInput);
-                m_NextButton.SetActive(IsLevelComplete());
-            }
-        }
-        else
-        {
-            m_ReadyForInput = true;
+            case "MainMenu":
+                {
+                    break;
+                }
+            case "Map":
+                {
+                    if (!System.IO.File.Exists(saveManagerScript.GetSaveGamePath()))
+                    {
+                        loadButton.SetActive(false);
+                    }
+                    else
+                    {
+                        if (!levelsLoaded)
+                        {
+                            loadButton.SetActive(true);
+                        }
+                    }
+                    break;
+                }
+            default:
+                {
+                    break;
+                }
         }
     }
 
-    bool IsLevelComplete()
+    public void NewGame()
     {
-        Wire[] wires = FindObjectsOfType<Wire>();
-        foreach (var wire in wires)
+        switch (activeScene)
         {
-            if (!wire.m_OnCross)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    void HandleSaving()
-    {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            jsonSavingScript.SaveData(playerData);
-            Debug.Log(playerData.ToString());
-        }
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            playerData = jsonSavingScript.LoadData();
-            Debug.Log(playerData.ToString());
-        }
-
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            AddBatteries(0, 0, 0, 1, 1, 0);
-            Debug.Log(playerData.ToString());
-        }
-
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            playerData.CompleteLevel(1);
-            Debug.Log(playerData.ToString());
+            case "MainMenu":
+                {
+                    break;
+                }
+            case "Map":
+                {
+                    playerData = saveManagerScript.NewGame();
+                    newGameButton.SetActive(false);
+                    loadButton.SetActive(false);
+                    recycleButton.SetActive(true);
+                    levelButtons.SetActive(true);
+                    levelsLoaded = true;
+                    break;
+                }
+            default:
+                {
+                    break;
+                }
         }
     }
-
-    public void AddBatteries(int NineVolt, int D, int C, int AA, int AAA, int Cell)
+    public void LoadGame()
     {
-        playerData.AddBatteries(NineVolt, D, C, AA, AAA, Cell);
+        switch (activeScene)
+        {
+            case "MainMenu":
+                {
+                    break;
+                }
+            case "Map":
+                {
+                    playerData = saveManagerScript.LoadGame();
+                    newGameButton.SetActive(false);
+                    loadButton.SetActive(false);
+                    recycleButton.SetActive(true);
+                    levelButtons.SetActive(true);
+                    levelsLoaded = true;
+                    break;
+                }
+            default:
+                {
+                    break;
+                }
+        }
     }
 
-    public void NextLevel()
+    public void Recycle()
     {
-        m_LevelBuilder.NextLevel();
-        HandleSceneRestart();
+        backgroundUI.SetActive(false);
+        buttonsUI.SetActive(false);
+        recycleUI.SetActive(true);
+    }
+
+    public void OK()
+    {
+        backgroundUI.SetActive(true);
+        buttonsUI.SetActive(true);
+        recycleUI.SetActive(false);
     }
 }

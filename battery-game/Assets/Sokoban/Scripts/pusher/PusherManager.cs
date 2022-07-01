@@ -22,11 +22,11 @@ public class PusherManager : MonoBehaviour
         {
             instance = this;
         }
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-        }
-        DontDestroyOnLoad(gameObject);
+        // else if (instance != this)
+        // {
+        //     Destroy(gameObject);
+        // }
+        // DontDestroyOnLoad(gameObject);
         await InitialisePusher();
         Console.WriteLine("Starting");
     }
@@ -62,14 +62,14 @@ public class PusherManager : MonoBehaviour
         _channel.Bind("my-event", (string data) =>
         {
             JObject json = JObject.Parse(JObject.Parse(data)["data"].ToString());
-            gameManager.AddBatteries(
-                Int32.Parse(json["NineVolt"].ToString()),
-                Int32.Parse(json["C"].ToString()),
-                Int32.Parse(json["D"].ToString()),
-                Int32.Parse(json["AA"].ToString()),
-                Int32.Parse(json["AAA"].ToString()),
-                Int32.Parse(json["Cell"].ToString())
-            );
+            // gameManager.AddBatteries(
+            //     Int32.Parse(json["NineVolt"].ToString()),
+            //     Int32.Parse(json["C"].ToString()),
+            //     Int32.Parse(json["D"].ToString()),
+            //     Int32.Parse(json["AA"].ToString()),
+            //     Int32.Parse(json["AAA"].ToString()),
+            //     Int32.Parse(json["Cell"].ToString())
+            // );
         });
     }
 
