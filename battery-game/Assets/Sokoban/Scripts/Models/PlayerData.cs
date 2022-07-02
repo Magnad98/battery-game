@@ -6,11 +6,14 @@ public enum Status { locked, unlocked, completed }
 
 public class PlayerData
 {
+    int currentLevel;
     List<Status> statuses;
     List<int> batteries;
 
-    public PlayerData(List<Status> statuses, List<int> batteries)
+    public PlayerData(int currentLevel, List<Status> statuses, List<int> batteries)
     {
+        this.currentLevel = currentLevel;
+
         this.statuses = new List<Status>();
         foreach (Status status in statuses)
         {
@@ -75,9 +78,27 @@ public class PlayerData
         return $"\tStatuses: 1:{statuses[0]} 2:{statuses[1]} 3:{statuses[2]} 4:{statuses[3]} 5:{statuses[4]}, 6:{statuses[5]}, 7:{statuses[6]},\n\t\tBatteries: NnineVolt:{batteries[0]}, D:{batteries[1]}, C:{batteries[2]}, AA:{batteries[3]}, AAA:{batteries[4]}, Cell:{batteries[5]}";
     }
 
+    public int GetCurrentLevel()
+    {
+        return currentLevel;
+    }
+    public void SetCurrentLevel(int currentLevel)
+    {
+        this.currentLevel = currentLevel;
+    }
+
     public List<Status> GetStatuses()
     {
         return statuses;
+    }
+
+    public void CompleteCurrentLevel()
+    {
+        statuses[currentLevel] = Status.completed;
+        if (currentLevel < 4 && statuses[currentLevel + 1] == Status.locked)
+        {
+            statuses[currentLevel + 1] = Status.unlocked;
+        }
     }
 
     public List<int> GetBatteries()

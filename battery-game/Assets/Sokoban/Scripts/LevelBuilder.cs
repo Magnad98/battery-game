@@ -11,7 +11,6 @@ public class LevelElement // Defines each item in a level by mapping a single ch
 
 public class LevelBuilder : MonoBehaviour
 {
-    public int m_CurrentLevel;
     public List<LevelElement> m_LevelElements;
     private Level m_Level;
 
@@ -28,18 +27,9 @@ public class LevelBuilder : MonoBehaviour
         }
     }
 
-    public void NextLevel()
+    public void Build(int currentLevel)
     {
-        m_CurrentLevel++;
-        if (m_CurrentLevel >= GetComponent<Levels>().m_Levels.Count)
-        {
-            m_CurrentLevel = 0; //Wrap back to first level
-        }
-    }
-
-    public void Build()
-    {
-        m_Level = GetComponent<Levels>().m_Levels[m_CurrentLevel];
+        m_Level = GetComponent<Levels>().m_Levels[currentLevel];
         // Offset coordinates so that centre of level is roughly at (0,0)
         int startX = -m_Level.Width / 2; // Save start x since it needs to be reset in loop
         int x = startX;

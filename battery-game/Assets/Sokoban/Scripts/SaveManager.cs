@@ -26,7 +26,8 @@ public class SaveManager : MonoBehaviour
     public PlayerData NewGame()
     {
         PlayerData playerData = new PlayerData(
-                    new List<Status>() { Status.unlocked, Status.unlocked, Status.unlocked, Status.unlocked, Status.unlocked, Status.locked, Status.locked },
+                    0,
+                    new List<Status>() { Status.unlocked, Status.locked, Status.locked, Status.locked, Status.locked, Status.locked, Status.locked },
                     new List<int>() { 0, 0, 0, 0, 0, 0 }
                 );
         SaveGame(playerData);
@@ -36,10 +37,12 @@ public class SaveManager : MonoBehaviour
     public PlayerData LoadGame()
     {
         using StreamReader reader = new StreamReader(path);
-        string[] input = reader.ReadToEnd().Replace("{\"levels\":[", "").Replace("],\"batteries\":[", ";").Replace("]}", "").Split(';');
+        string[] input = reader.ReadToEnd().Replace("{\"currentLevel\":", "").Replace(",\"levels\":[", ";").Replace("],\"batteries\":[", ";").Replace("]}", "").Split(';');
+
+        int currentLevel = Int32.Parse(input[0]);
 
         List<Status> statuses = new List<Status>();
-        string[] statusesArray = input[0].Replace("\"", "").Split(',');
+        string[] statusesArray = input[1].Replace("\"", "").Split(',');
         foreach (string element in statusesArray)
             switch (element)
             {
@@ -48,14 +51,16 @@ public class SaveManager : MonoBehaviour
                 case "locked": statuses.Add(Status.locked); break;
                 default: statuses.Add(Status.locked); break;
             }
-        List<int> batteries = input[1].Replace("\"", "").Split(',').Select(Int32.Parse).ToList();
+        List<int> batteries = input[2].Replace("\"", "").Split(',').Select(Int32.Parse).ToList();
 
-        return new PlayerData(statuses, batteries);
+        return new PlayerData(currentLevel, statuses, batteries);
     }
 
     public void SaveGame(PlayerData playerData)
     {
-        string statusString, batteryString, outputString = "{\"levels\":[";
+        string statusString, batteryString, outputString = "{\"currentLevel\":";
+
+        outputString += playerData.GetCurrentLevel() + ",\"levels\":[";
 
         List<Status> statuses = playerData.GetStatuses();
         for (int i = 0; i < statuses.Count; i++)
