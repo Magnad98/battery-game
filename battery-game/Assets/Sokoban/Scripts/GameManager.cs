@@ -219,7 +219,8 @@ public class GameManager : MonoBehaviour
         // backgroundUI.SetActive(true);
         // buttonsUI.SetActive(true);
         // recycleUI.SetActive(false);
-        // Destroy(pusherInstance);
+        Destroy(pusherInstance);
+        pusherInstance.GetComponent<PusherManager>().pusher.DisconnectAsync();
         LoadMap();
     }
 
@@ -260,7 +261,7 @@ public class GameManager : MonoBehaviour
 
     public void AddBatteries(int NineVolt, int D, int C, int AA, int AAA, int Cell)
     {
-        playerData.AddBatteries(NineVolt, D, C, AA, AAA, Cell);
+        Debug.Log(playerData.AddBatteries(NineVolt, D, C, AA, AAA, Cell));
         saveManagerScript.SaveGame(playerData);
     }
 }

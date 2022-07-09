@@ -926,6 +926,7 @@ MonoBehaviour:
   recycleWindow: {fileID: 0}
   saveButton: {fileID: 79074028}
   levelButtons: []
+  pusherManagerPrefab: {fileID: 0}
 --- !u!4 &1431168426
 Transform:
   m_ObjectHideFlags: 0
@@ -952,15 +953,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d0cfd66c6c81014591e787697a9071b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_LevelElements:
-  - m_Character: '#'
-    m_Prefab: {fileID: 2713785234515932918, guid: 921d4e4dda497c04488c3f8e9426185b, type: 3}
-  - m_Character: '@'
-    m_Prefab: {fileID: 7518186969270336787, guid: 2e4c7e152d162094ba94664131456292, type: 3}
-  - m_Character: $
-    m_Prefab: {fileID: 1912339264375331065, guid: 97820ecf3ea2353439ef4431dff4fec4, type: 3}
-  - m_Character: .
-    m_Prefab: {fileID: 297041139124001863, guid: 3c39a34fa1a630043ace87e45f72a6c2, type: 3}
+  levelElements:
+  - character: .
+    prefab: {fileID: 297041139124001863, guid: 3c39a34fa1a630043ace87e45f72a6c2, type: 3}
+  - character: '@'
+    prefab: {fileID: 7518186969270336787, guid: 2e4c7e152d162094ba94664131456292, type: 3}
+  - character: '#'
+    prefab: {fileID: 2713785234515932918, guid: 921d4e4dda497c04488c3f8e9426185b, type: 3}
+  - character: $
+    prefab: {fileID: 1912339264375331065, guid: 97820ecf3ea2353439ef4431dff4fec4, type: 3}
 --- !u!114 &1431168428
 MonoBehaviour:
   m_ObjectHideFlags: 0

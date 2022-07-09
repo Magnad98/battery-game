@@ -1,55 +1,37 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
-public class Level // A single level
+public class Level
 {
-    public List<string> m_Rows = new List<string>();
-
-    public int Height { get { return m_Rows.Count; } }
-    public int Width
-    {
-        //Width is length of longest row
-        get
-        {
-            int maxLength = 0;
-            foreach (var r in m_Rows)
-            {
-                if (r.Length > maxLength)
-                {
-                    maxLength = r.Length;
-                }
-            }
-            return maxLength;
-        }
-    }
+    public List<string> rows = new List<string>();
+    public int Height { get { return rows.Count; } }
+    public int Width { get { return rows.Aggregate("", (longestRow, currentRow) => currentRow.Length > longestRow.Length ? currentRow : longestRow).Length; } }
 }
 
 public class Levels : MonoBehaviour
 {
-    public string filename;
-    public List<Level> m_Levels;
+    public List<Level> levels;
 
     void Awake()
     {
-        TextAsset textAsset = (TextAsset)Resources.Load(filename);
+        TextAsset textAsset = (TextAsset)Resources.Load("Levels");
         if (!textAsset)
-        {
             return;
-        }
+
         string competeText = textAsset.text;
         string[] lines = competeText.Split(new string[] { "\n" }, System.StringSplitOptions.None);
-        m_Levels.Add(new Level());
+
+        levels.Add(new Level());
         for (long i = 0; i < lines.LongLength; i++)
         {
-            string line = lines[i];
-            if (line.StartsWith(";"))
+            if (lines[i].StartsWith(";"))
             {
-                m_Levels.Add(new Level());
+                levels.Add(new Level());
                 continue;
             }
-            m_Levels[m_Levels.Count - 1].m_Rows.Add(line); // Always adding level rows to least level in list of levels
+            levels[levels.Count - 1].rows.Add(lines[i]);
         }
     }
 }
