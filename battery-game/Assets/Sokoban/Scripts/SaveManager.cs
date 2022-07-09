@@ -6,21 +6,17 @@ using UnityEngine;
 
 public class SaveManager : MonoBehaviour
 {
-    string path;
-
-    void Start()
-    {
-        path = Application.streamingAssetsPath;
-        if (!Directory.Exists(path))
-        {
-            Directory.CreateDirectory(path);
-        }
-        path += "/PlayerData.json";
-    }
+    string path = $"{Application.streamingAssetsPath}/PlayerData.json";
 
     public string GetSaveGamePath()
     {
         return path;
+    }
+
+    void Start()
+    {
+        if (!Directory.Exists(Application.streamingAssetsPath))
+            Directory.CreateDirectory(Application.streamingAssetsPath);
     }
 
     public PlayerData NewGame()
