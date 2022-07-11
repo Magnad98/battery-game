@@ -28,7 +28,7 @@ public class LevelManager : MonoBehaviour
             {
                 readyForInput = false;
                 player.Move(moveInput);
-                gameManagerScript.ActivateSaveButton(IsLevelComplete());
+                gameManagerScript.LoadSaveButtonUI(IsLevelComplete());
             }
         }
         else

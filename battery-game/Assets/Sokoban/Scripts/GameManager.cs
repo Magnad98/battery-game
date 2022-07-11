@@ -6,12 +6,11 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     //Scripts
-    LevelLoader levelLoaderScript;
     SaveManager saveManagerScript;
     LevelManager levelManager;
 
     //UI Elements
-    [SerializeField] GameObject backgroundUI, buttonsUI, recycleUI, newGameButton, loadButton, recycleButton, recycleWindow, saveButton;
+    [SerializeField] GameObject backgroundUI, buttonsUI, recycleUI, recycleButton, saveButton;
     [SerializeField] GameObject[] levelButtons;
 
     //Prefabs
@@ -21,192 +20,67 @@ public class GameManager : MonoBehaviour
     GameObject pusherInstance;
     PlayerData playerData;
     string activeScene;
-    bool levelsLoaded;
 
     //Methods
     void Start()
     {
-        activeScene = SceneManager.GetActiveScene().name;
         saveManagerScript = FindObjectOfType<GameManager>().GetComponent<SaveManager>();
-        levelLoaderScript = FindObjectOfType<GameManager>().GetComponent<LevelLoader>();
+        activeScene = SceneManager.GetActiveScene().name;
 
         switch (activeScene)
         {
-            case "MainMenu":
-                {
-                    break;
-                }
             case "Map":
                 {
-                    newGameButton.SetActive(true);
-
-                    loadButton.SetActive(false);
-                    recycleButton.SetActive(false);
-                    foreach (GameObject levelButton in levelButtons)
+                    if (System.IO.File.Exists(saveManagerScript.GetSaveGamePath()))
                     {
-                        levelButton.SetActive(false);
+                        playerData = saveManagerScript.LoadGame();
+                        LoadRecycleAndLevelButtonsUI();
                     }
-                    levelsLoaded = false;
-                    recycleUI.SetActive(false);
                     break;
                 }
-            case "MainScene":
-                {
-                    levelManager = FindObjectOfType<GameManager>().GetComponent<LevelManager>();
-                    saveButton.SetActive(false);
-                    break;
-                }
-            default:
-                {
-                    break;
-                }
+            case "MainScene": { levelManager = FindObjectOfType<GameManager>().GetComponent<LevelManager>(); break; }
+            default: break;
         }
     }
 
-    void Update()
+    void LoadRecycleAndLevelButtonsUI()
     {
-        switch (activeScene)
+        recycleButton.SetActive(true);
+
+        List<Status> statuses = playerData.GetStatuses();
+        for (int i = 0; i < levelButtons.Length; i++)
         {
-            case "MainMenu":
-                {
-                    break;
-                }
-            case "Map":
-                {
-                    if (!System.IO.File.Exists(saveManagerScript.GetSaveGamePath()))
+            levelButtons[i].SetActive(true);
+            levelButtons[i].GetComponent<Button>().GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f);
+            switch (statuses[i])
+            {
+                case Status.unlocked: { levelButtons[i].GetComponent<Button>().interactable = true; break; }
+                case Status.completed:
                     {
-                        loadButton.SetActive(false);
+                        levelButtons[i].GetComponent<Button>().interactable = true;
+                        levelButtons[i].GetComponent<Button>().GetComponent<Image>().color = new Color(0.72f, 0.88f, 0.98f);
+                        break;
                     }
-                    else
-                    {
-                        if (!levelsLoaded)
-                        {
-                            loadButton.SetActive(true);
-                        }
-                    }
-                    break;
-                }
-            case "MainScene":
-                {
-                    break;
-                }
-            default:
-                {
-                    break;
-                }
+                default: { levelButtons[i].GetComponent<Button>().interactable = false; break; }
+            }
         }
     }
+
+    //Menu
+    public void LoadMap() { SceneManager.LoadScene("Map"); }
+
+    public void ExitGame() { Application.Quit(); }
+
+    //Map
+    public void LoadMenu() { SceneManager.LoadScene("MainMenu"); }
 
     public void NewGame()
     {
-        switch (activeScene)
-        {
-            case "MainMenu":
-                {
-                    break;
-                }
-            case "Map":
-                {
-                    playerData = saveManagerScript.NewGame();
-                    newGameButton.SetActive(false);
-                    loadButton.SetActive(false);
-                    recycleButton.SetActive(true);
-
-                    List<Status> statuses = playerData.GetStatuses();
-                    for (int i = 0; i < levelButtons.Length; i++)
-                    {
-                        levelButtons[i].SetActive(true);
-                        levelButtons[i].GetComponent<Button>().interactable = statuses[i] == Status.unlocked || statuses[i] == Status.completed ? true : false;
-                    }
-
-                    levelsLoaded = true;
-                    break;
-                }
-            default:
-                {
-                    break;
-                }
-        }
-    }
-    public void LoadGame()
-    {
-        switch (activeScene)
-        {
-            case "MainMenu":
-                {
-                    break;
-                }
-            case "Map":
-                {
-                    playerData = saveManagerScript.LoadGame();
-                    newGameButton.SetActive(false);
-                    loadButton.SetActive(false);
-                    recycleButton.SetActive(true);
-
-                    List<Status> statuses = playerData.GetStatuses();
-                    for (int i = 0; i < levelButtons.Length; i++)
-                    {
-                        levelButtons[i].SetActive(true);
-                        levelButtons[i].GetComponent<Button>().GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f);
-                        switch (statuses[i])
-                        {
-                            case Status.unlocked:
-                                {
-                                    levelButtons[i].GetComponent<Button>().interactable = true;
-                                    break;
-                                }
-                            case Status.completed:
-                                {
-                                    levelButtons[i].GetComponent<Button>().interactable = true;
-                                    levelButtons[i].GetComponent<Button>().GetComponent<Image>().color = new Color(0.72f, 0.88f, 0.98f);
-                                    break;
-                                }
-                            default:
-                                {
-                                    levelButtons[i].GetComponent<Button>().interactable = false;
-                                    break;
-                                }
-                        }
-                    }
-                    levelsLoaded = true;
-                    break;
-                }
-            case "MainScene":
-                {
-                    break;
-                }
-            default:
-                {
-                    break;
-                }
-        }
+        playerData = saveManagerScript.NewGame();
+        LoadRecycleAndLevelButtonsUI();
     }
 
-    public void SaveGame()
-    {
-        switch (activeScene)
-        {
-            case "MainMenu":
-                {
-                    break;
-                }
-            case "Map":
-                {
-                    break;
-                }
-            case "MainScene":
-                {
-                    CompleteLevel();
-                    break;
-                }
-            default:
-                {
-                    break;
-                }
-        }
-    }
-
-    public void Recycle()
+    public void LoadRecycleUI()
     {
         backgroundUI.SetActive(false);
         buttonsUI.SetActive(false);
@@ -214,13 +88,16 @@ public class GameManager : MonoBehaviour
         pusherInstance = Instantiate(pusherManagerPrefab, new Vector3(0, 0, 0), Quaternion.identity);
     }
 
-    public void OK()
+    public void AddBatteries(int NineVolt, int D, int C, int AA, int AAA, int Cell)
     {
-        // backgroundUI.SetActive(true);
-        // buttonsUI.SetActive(true);
-        // recycleUI.SetActive(false);
-        Destroy(pusherInstance);
+        Debug.Log(playerData.AddBatteries(NineVolt, D, C, AA, AAA, Cell));
+        saveManagerScript.SaveGame(playerData);
+    }
+
+    public void CloseRecycleUI()
+    {
         pusherInstance.GetComponent<PusherManager>().pusher.DisconnectAsync();
+        Destroy(pusherInstance);
         LoadMap();
     }
 
@@ -228,40 +105,19 @@ public class GameManager : MonoBehaviour
     {
         playerData.SetCurrentLevel(levelID - 1);
         saveManagerScript.SaveGame(playerData);
-        levelLoaderScript.LoadLevel("MainScene");
+        SceneManager.LoadScene("MainScene");
     }
 
-    public void CompleteLevel()
+    //Level
+    public void ReloadLevel() { SceneManager.LoadScene("MainScene"); }
+
+    public void LoadSaveButtonUI(bool activate) { saveButton.SetActive(activate); }
+
+    public void SaveLevel()
     {
         playerData = saveManagerScript.LoadGame();
         playerData.CompleteCurrentLevel();
         saveManagerScript.SaveGame(playerData);
         LoadMap();
-    }
-
-    public void RestartLevel()
-    {
-        levelLoaderScript.LoadLevel("MainScene");
-    }
-
-    public void LoadMap()
-    {
-        levelLoaderScript.LoadLevel("Map");
-    }
-
-    public void LoadMenu()
-    {
-        levelLoaderScript.LoadLevel("MainMenu");
-    }
-
-    public void ActivateSaveButton(bool activate)
-    {
-        saveButton.SetActive(activate);
-    }
-
-    public void AddBatteries(int NineVolt, int D, int C, int AA, int AAA, int Cell)
-    {
-        Debug.Log(playerData.AddBatteries(NineVolt, D, C, AA, AAA, Cell));
-        saveManagerScript.SaveGame(playerData);
     }
 }

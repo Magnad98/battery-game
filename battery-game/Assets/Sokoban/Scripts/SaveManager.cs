@@ -8,10 +8,7 @@ public class SaveManager : MonoBehaviour
 {
     string path = $"{Application.streamingAssetsPath}/PlayerData.json";
 
-    public string GetSaveGamePath()
-    {
-        return path;
-    }
+    public string GetSaveGamePath() { return path; }
 
     void Start()
     {

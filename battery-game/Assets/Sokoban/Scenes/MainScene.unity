@@ -141,7 +141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &79074029
 RectTransform:
   m_ObjectHideFlags: 0
@@ -209,7 +209,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1431168425}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: SaveGame
+        m_MethodName: SaveLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -894,7 +894,6 @@ GameObject:
   - component: {fileID: 1431168426}
   - component: {fileID: 1431168425}
   - component: {fileID: 1431168430}
-  - component: {fileID: 1431168429}
   - component: {fileID: 1431168431}
   - component: {fileID: 1431168428}
   - component: {fileID: 1431168427}
@@ -974,20 +973,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f9c4d3d56740d5458f39f932df4faae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filename: Levels
-  m_Levels: []
---- !u!114 &1431168429
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1431168424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec44e34359466e74982728c7f71c0c03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  levels: []
 --- !u!114 &1431168430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1097,7 +1083,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1431168425}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: RestartLevel
+        m_MethodName: ReloadLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

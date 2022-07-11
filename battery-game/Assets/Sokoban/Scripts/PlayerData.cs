@@ -36,6 +36,8 @@ public class PlayerData
             this.batteries.Add(battery);
     }
 
+    public override string ToString() { return $"\tStatuses: 1:{statuses[0]} 2:{statuses[1]} 3:{statuses[2]} 4:{statuses[3]} 5:{statuses[4]}, 6:{statuses[5]}, 7:{statuses[6]},\n\t\tBatteries: NnineVolt:{batteries[0]}, D:{batteries[1]}, C:{batteries[2]}, AA:{batteries[3]}, AAA:{batteries[4]}, Cell:{batteries[5]}"; }
+
     public bool AddBatteries(int NineVolt, int D, int C, int AA, int AAA, int Cell)
     {
         batteries[0] += NineVolt;

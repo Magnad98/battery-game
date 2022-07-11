@@ -1459,7 +1459,6 @@ GameObject:
   - component: {fileID: 1491432898}
   - component: {fileID: 1491432899}
   - component: {fileID: 1491432901}
-  - component: {fileID: 1491432900}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1496,24 +1495,11 @@ MonoBehaviour:
   backgroundUI: {fileID: 0}
   buttonsUI: {fileID: 0}
   recycleUI: {fileID: 0}
-  newGameButton: {fileID: 0}
-  loadButton: {fileID: 0}
   recycleButton: {fileID: 0}
-  recycleWindow: {fileID: 0}
+  saveButton: {fileID: 0}
   levelButtons:
   - {fileID: 0}
---- !u!114 &1491432900
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1491432897}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec44e34359466e74982728c7f71c0c03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  pusherManagerPrefab: {fileID: 0}
 --- !u!114 &1491432901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2119,8 +2105,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1491432900}
-        m_TargetAssemblyTypeName: LevelLoader, Assembly-CSharp
+      - m_Target: {fileID: 1491432899}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: ExitGame
         m_Mode: 1
         m_Arguments:
@@ -2327,10 +2313,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1491432900}
-        m_TargetAssemblyTypeName: LevelLoader, Assembly-CSharp
-        m_MethodName: LoadLevel
-        m_Mode: 5
+      - m_Target: {fileID: 1491432899}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: LoadMap
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
