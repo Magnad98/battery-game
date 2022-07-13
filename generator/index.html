@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>QR Code Generator</title>
+
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="./css/styles.css">
+
+  <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+</head>
+
+<body onload="document.QRCodeFrom.reset();">
+  <div class="form">
+    <h1>
+      Genearte a QR code on
+      <br>
+      the batteries you recycled!
+    </h1>
+    <br>
+    <div>
+      <img src="./img/battery-types.png" alt="battery-types" style="width: 100%; height: auto">
+    </div>
+    <br>
+    <form name="QRCodeFrom">
+      <div>
+        <label for="NineVolt-quantity">9V:</label>
+        <input type="number" id="NineVolt-quantity" name="NineVolt-quantity" min="0" max="100" step="1" value="0">
+      </div>
+      <div>
+        <label for="D-quantity">D:</label>
+        <input type="number" id="D-quantity" name="D-quantity" min="0" max="100" step="1" value="0">
+      </div>
+      <div>
+        <label for="C-quantity">C:</label>
+        <input type="number" id="C-quantity" name="C-quantity" min="0" max="100" step="1" value="0">
+      </div>
+      <div>
+        <label for="AA-quantity">AA:</label>
+        <input type="number" id="AA-quantity" name="AA-quantity" min="0" max="100" step="1" value="0">
+      </div>
+      <div>
+        <label for="AAA-quantity">AAA:</label>
+        <input type="number" id="AAA-quantity" name="AAA-quantity" min="0" max="100" step="1" value="0">
+      </div>
+      <div>
+        <label for="Cell-quantity">Cell:</label>
+        <input type="number" id="Cell-quantity" name="Cell-quantity" min="0" max="100" step="1" value="0">
+      </div>
+      <div>
+        <button type="button" onclick="generateQRCode()">
+          Generate QR Code
+        </button>
+      </div>
+    </form>
+
+    <div id="qrcode-container">
+      <h4>Your QR Code is:</h4>
+      <div id="qrcode" class="qrcode"></div>
+    </div>
+  </div>
+
+  <script src="./js/index.js"></script>
+</body>
+
+</html>
