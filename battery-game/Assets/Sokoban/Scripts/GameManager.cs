@@ -7,16 +7,13 @@ public class GameManager : MonoBehaviour
 {
     //Scripts
     SaveManager saveManagerScript;
-    LevelManager levelManager;
 
     //UI Elements
     [SerializeField] GameObject backgroundUI, buttonsUI, recycleUI, recycleButton, saveButton;
     [SerializeField] GameObject[] levelButtons;
-
-    //Prefabs
     [SerializeField] GameObject pusherManagerPrefab;
 
-    //Variables
+    //Properties
     GameObject pusherInstance;
     PlayerData playerData;
     string activeScene;
@@ -24,13 +21,14 @@ public class GameManager : MonoBehaviour
     //Methods
     void Start()
     {
-        saveManagerScript = FindObjectOfType<GameManager>().GetComponent<SaveManager>();
         activeScene = SceneManager.GetActiveScene().name;
 
         switch (activeScene)
         {
             case "Map":
                 {
+                    saveManagerScript = FindObjectOfType<GameManager>().GetComponent<SaveManager>();
+
                     if (System.IO.File.Exists(saveManagerScript.GetSaveGamePath()))
                     {
                         playerData = saveManagerScript.LoadGame();
@@ -38,7 +36,7 @@ public class GameManager : MonoBehaviour
                     }
                     break;
                 }
-            case "MainScene": { levelManager = FindObjectOfType<GameManager>().GetComponent<LevelManager>(); break; }
+            case "MainScene": { saveManagerScript = FindObjectOfType<GameManager>().GetComponent<SaveManager>(); break; }
             default: break;
         }
     }
