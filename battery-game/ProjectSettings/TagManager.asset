@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Battery +
+  - Battery -
+  - Wire
+  - Wall
+  - Cross
   layers:
   - Default
   - TransparentFX
@@ -11,9 +16,9 @@ TagManager:
   - 
   - Water
   - UI
+  - StopMovement
   - 
   - 
-  - Ground
   - 
   - 
   - 
