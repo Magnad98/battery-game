@@ -1,0 +1,34 @@
+.panel {
+  font: 16px "Open Sans", Helvetica, Arial, sans-serif;
+  border: 1px solid #22d;
+  padding: 12px;
+  width: 500px;
+  text-align: center;
+}
+
+.button {
+  font: 22px "Open Sans", Helvetica, Arial, sans-serif;
+  padding: 5px 36px;
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 175%;
+}
+
+#input, #output {
+  width: 90%;
+  margin: 1rem;
+}
+
+.result-success{
+  background-color: green;
+  color:#fff;
+  padding:20px;
+}
+
+.result-error{
+  background-color: red;
+  color:#fff;
+  padding:20px;
+}
